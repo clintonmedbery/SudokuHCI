@@ -106,7 +106,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		grid.setSpacing(false);
 		grid.setWidth("300px");
 		grid.setHeight("300px");
-		grid.addLayoutClickListener(new GridClickListener());
+		//grid.addLayoutClickListener(new GridClickListener());
 		
 		//Getting our input grid
 		inputGrid = new GridLayout(3,3);
@@ -163,7 +163,10 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 						System.out.print("Data is: "  + draggedItem + "\n");
 						board.setValue(ourCol, ourRow, draggedItem, draggedItem.equals("0") ? false : true);
 						label.setPropertyDataSource(board.getCellElement(ourCol, ourRow));
-				        Broadcaster.broadcastBoard(board);
+						
+						System.out.println("Drag and Drop Update");
+						update();
+				        
 
 						
 				    }
@@ -287,6 +290,11 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		Broadcaster.register(this);
 	}
 	
+	public void update(){
+        Broadcaster.broadcastBoard(board);
+
+	}
+	
 	@Override
     public void detach() {
         Broadcaster.unregister(this);
@@ -310,7 +318,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 	            @Override
 	            public void run() {
 	                // Show it somehow
-	               
+	            	System.out.println("UPDATING BOARD");
 	            	for( int col = 0; col < 9; col++ ){
 	    				for( int row = 0; row < 9; row++ ){
 	    					String newValue = Integer.toString(newBoard.getIntegerValue(row, col));
@@ -356,6 +364,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 	    							System.out.print("Data is: "  + draggedItem + "\n");
 	    							board.setValue(ourCol, ourRow, draggedItem, draggedItem.equals("0") ? false : true);
 	    							label.setPropertyDataSource(board.getCellElement(ourCol, ourRow));
+	    							update();
 	    					    }
 	    					
 	    					});
