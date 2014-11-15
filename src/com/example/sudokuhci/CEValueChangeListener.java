@@ -11,5 +11,6 @@ public class CEValueChangeListener implements ValueChangeListener {
 //		System.out.println( "In CEValueChangeListener: " + event.getProperty() );
 		((Label)event.getProperty()).markAsDirty();
 		((Label)event.getProperty()).setImmediate(true);
+		System.out.println("VALUE CHANGE");
 	}
 }

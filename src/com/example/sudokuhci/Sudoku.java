@@ -36,6 +36,7 @@ import com.vaadin.ui.DragAndDropWrapper.WrapperTransferable;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -59,6 +60,8 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 	
 	private final VerticalLayout vLayout = new VerticalLayout();
 	private final HorizontalLayout hLayout = new HorizontalLayout();
+	
+	private final VerticalLayout chatLayout = new VerticalLayout();
 	
 	private final HorizontalLayout h2Layout = new HorizontalLayout();
 	
@@ -106,7 +109,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		grid.setSpacing(false);
 		grid.setWidth("300px");
 		grid.setHeight("300px");
-		//grid.addLayoutClickListener(new GridClickListener());
+		grid.addLayoutClickListener(new GridClickListener());
 		
 		//Getting our input grid
 		inputGrid = new GridLayout(3,3);
@@ -224,6 +227,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 			@Override
 		    public void buttonClick(ClickEvent event) {
 		        name = nameInput.getValue();
+		        chatLayout.addComponent(chatBox);
 		        
 				vLayout.addComponent( hLayout );
 				hLayout.addComponent(upload);
@@ -231,9 +235,11 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				
 				
 				h2Layout.addComponent(panel);
-				h2Layout.addComponent(inputPanel);
+				h2Layout.addComponent(chatLayout);
+				
 				
 				vLayout.addComponent(h2Layout);
+				vLayout.addComponent(inputPanel);
 				
 				hLayout.setMargin(true);
 				hLayout.setSpacing(true);
@@ -244,10 +250,10 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				vLayout.setMargin(true);
 				vLayout.setSpacing(true);
 				
-				vLayout.addComponent(chatBox);
-				vLayout.addComponent(chatInput);
-				vLayout.addComponent(sendButton);
-				vLayout.addComponent(test);
+				
+				chatLayout.addComponent(chatInput);
+				chatLayout.addComponent(sendButton);
+				chatLayout.addComponent(test);
 				
 				vLayout.removeComponent(enterName);
 				vLayout.removeComponent(nameInput);
@@ -286,7 +292,24 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		/*
 		 * Click on the Solve Button
 		 */
-		solveButton.addClickListener( new Solver( grid, board ));
+		solveButton.addClickListener(new Button.ClickListener() {
+			@Override
+		    public void buttonClick(ClickEvent event) {
+		        // Broadcast the message
+				SolveChecker checker = new SolveChecker(grid, board);
+				if(!checker.solveSudoko()){
+					//Replace this with a UI broadcast
+					Notification.show("Incorrect!");
+					System.out.println("INCORRECT");
+				} else {
+					Notification.show("Correct!");
+					System.out.println("CORRECT");
+
+				}
+		        
+		    }
+		});
+		
 		Broadcaster.register(this);
 	}
 	

@@ -1,19 +1,12 @@
 package com.example.sudokuhci;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.Button.ClickEvent;
 
-
-
-public class Solver implements ClickListener {
-
+public class SolveChecker {
 	private static final long serialVersionUID = 1L;
 	private static Cube c1, c2, c3, c4, c5, c6, c7, c8, c9;
 	private static List<Cube> cubeList;
@@ -21,14 +14,19 @@ public class Solver implements ClickListener {
 	private Board board;
 	private GridLayout grid;
 	
-	public Solver( GridLayout grid, Board board )
+	public SolveChecker( GridLayout grid, Board board )
 	{
 		this.grid = grid;
 		this.board = board;
 	}
 	
-	@Override
-	public void buttonClick(ClickEvent event) {
+	
+
+	/*
+	 * Solver
+	 */
+	public boolean solveSudoko() {
+		
 		cubeList = new ArrayList<Cube>();
 		c1 = Cube.createCube(CubeTypes.TOPLEFT_11, board);
 		c2 = Cube.createCube(CubeTypes.TOPMIDDLE_12, board);
@@ -49,21 +47,6 @@ public class Solver implements ClickListener {
 		cubeList.add(c8);
 		cubeList.add(c9);
 		
-		solveSudoko();
-		
-		System.out.println( board);
-		
-		
-			
-				
-	}
-	
-
-	/*
-	 * Solver
-	 */
-	private boolean solveSudoko() {
-
 		Square cell = EmptySquarePresent();
 		
 		if (!cell.isEmptySquare()) {
@@ -158,5 +141,4 @@ public class Solver implements ClickListener {
 		}
 		return sq;
 	}
-
 }
