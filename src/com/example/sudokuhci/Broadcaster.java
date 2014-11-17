@@ -20,6 +20,7 @@ public class Broadcaster implements Serializable {
     public interface BroadcastListener {
         void receiveBroadcast(String message);
         void updateBoard(Board board);
+        void checkForUpdate(Board board);
     }
     
     private static LinkedList<BroadcastListener> listeners =
@@ -28,6 +29,7 @@ public class Broadcaster implements Serializable {
     public static synchronized void register(
             BroadcastListener listener) {
         listeners.add(listener);
+        
     }
     
     public static synchronized void unregister(

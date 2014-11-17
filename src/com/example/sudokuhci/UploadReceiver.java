@@ -8,8 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.example.sudokuhci.Broadcaster.BroadcastListener;
 import com.vaadin.annotations.Push;
 import com.vaadin.data.Property;
@@ -28,6 +28,7 @@ import com.vaadin.ui.Upload.FinishedEvent;
 import com.vaadin.ui.Upload.FinishedListener;
 import com.vaadin.ui.Upload.Receiver;
 
+@Theme("sudokuhcitheme")
 @Push
 public class UploadReceiver extends UI implements Receiver, FinishedListener, BroadcastListener{
 
@@ -194,6 +195,12 @@ public class UploadReceiver extends UI implements Receiver, FinishedListener, Br
     					label.setWidth(null);
     					label.setImmediate(true);
     					
+    					if(board.getCellElement(col, row).isReadOnly()){
+    						label.setStyleName("readonly");
+    					} else {
+    						label.setStyleName("notreadonly");
+    					}
+    					
     					DragAndDropWrapper layoutWrapper = new DragAndDropWrapper(label);
     					
     					layoutWrapper.setDropHandler(new DropHandler() {
@@ -225,6 +232,12 @@ public class UploadReceiver extends UI implements Receiver, FinishedListener, Br
 
 	@Override
 	protected void init(VaadinRequest request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void checkForUpdate(Board board) {
 		// TODO Auto-generated method stub
 		
 	}

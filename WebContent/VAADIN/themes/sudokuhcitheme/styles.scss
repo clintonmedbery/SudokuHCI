@@ -1,0 +1,89 @@
+@import "addons.scss";
+@import "sudokuhcitheme.scss";
+
+/* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
+/* The actual styles should be defined in sudokuhcitheme.scss */
+.sudokuhcitheme {
+  @include addons;
+  @include sudokuhcitheme;
+    
+$textcolor: #A6BDC5;
+$buttoncolor: #5C747D;   
+$dark-color: #0D1619;
+$mid-color: #1E2629;
+$spacing: 4px;
+$brightblue: #0001FC;
+
+.body{
+    background: $dark-color;
+}
+
+.readonly{
+    color: $brightblue;
+    font-weight: bold;
+    
+    
+}
+
+.notreadonly{
+    color: $textcolor;
+    
+}
+    
+.v-button-caption {
+    color: $textcolor;
+}
+
+.button .v-button{
+    background: $buttoncolor;
+    border: $buttoncolor;
+    box-shadow: none;
+    display:inline-block;
+	cursor:pointer;
+    
+}
+    
+.v-button{
+    background: $buttoncolor;
+    border: $buttoncolor;
+    box-shadow: none;
+    display:inline-block;
+	cursor:pointer;
+    
+}
+
+.chatbox{
+    background: $mid-color;
+    color: $textcolor;
+}
+
+
+.backcolor{
+    background: $dark-color;
+}
+
+.v-panel{
+    background: $mid-color;
+    color: $textcolor;
+}
+
+.v-ddwrapper{
+    background: $mid-color;
+    color: $textcolor;
+}
+ 
+.v-label {
+    color: $textcolor;
+    padding-left: $spacing;
+    margin-top: $spacing;
+    margin-bottom: $spacing;
+    
+    
+}
+
+.v-ui{
+    background: $dark-color;
+}
+    
+    
+}

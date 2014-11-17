@@ -22,7 +22,7 @@ public class ChatText extends CustomComponent {
 	
 	//private String conversation;
 	public ChatText(){
-		panel = new Panel("ChatBox");
+		panel = new Panel();
 		pLayout = new VerticalLayout();
 		panel.setContent(pLayout);
 		
@@ -33,12 +33,13 @@ public class ChatText extends CustomComponent {
 		setCompositionRoot(panel);
 		
 		panel.setWidth("500px");
-		panel.setHeight("250px");
+		panel.setHeight("245px");
+		panel.setStyleName("panel");
 		
 	}
 	
 	public void addChat(String message){
-		
+	
 		pLayout.addComponent(new Label(message));
 		panel.setContent(pLayout);
 		

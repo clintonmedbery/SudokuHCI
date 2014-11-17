@@ -48,7 +48,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Push
 @SuppressWarnings("serial")
-@Theme("sudokuhci")
+@Theme("sudokuhcitheme")
 public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 	
 	private Panel panel;
@@ -107,26 +107,28 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		grid = new GridLayout( 9, 9 );
 		grid.setMargin(false);
 		grid.setSpacing(false);
-		grid.setWidth("300px");
-		grid.setHeight("300px");
-		grid.addLayoutClickListener(new GridClickListener());
+		grid.setWidth("100%");
+		grid.setHeight("100%");
+		//grid.addLayoutClickListener(new GridClickListener());
 		
 		//Getting our input grid
-		inputGrid = new GridLayout(3,3);
-		inputGrid.setWidth("100px");
-		inputGrid.setHeight("100px");
+		inputGrid = new GridLayout(9,1);
+		inputGrid.setWidth("100%");
+		inputGrid.setHeight("100%");
 		
 		//Setting up our UI panel
 		panel = new Panel();
 		panel.setContent(grid);
-		panel.setWidth("305px");
-		panel.setHeight("305px");
+		panel.setWidth("315px");
+		panel.setHeight("315px");
+		panel.setStyleName("panel");
 		
 		//Setting up our input panel
 		inputPanel = new Panel();
 		inputPanel.setContent(inputGrid);
-		inputPanel.setWidth("110px");
-		inputPanel.setHeight("110px");
+		inputPanel.setWidth("315px");
+		inputPanel.setHeight("100%");
+		inputPanel.setStyleName("panel");
 		inputGrid.setMargin(false);
 		inputGrid.setSpacing(true);
 		
@@ -149,7 +151,15 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				label.setWidth(null);
 				label.setImmediate(true);
 				
+				if(board.getCellElement(col, row).isReadOnly()){
+					label.setStyleName("readonly");
+				} else {
+					label.setStyleName("notreadonly");
+				}
+				
 				DragAndDropWrapper layoutWrapper = new DragAndDropWrapper(label);
+				
+				
 				
 				layoutWrapper.setDropHandler(new DropHandler() {
 					public AcceptCriterion getAcceptCriterion() {
@@ -176,6 +186,9 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				
 				});
 			
+				
+				
+				
 				grid.addComponent( layoutWrapper, col, row );
 				grid.setComponentAlignment(layoutWrapper, Alignment.MIDDLE_CENTER);
 				
@@ -207,21 +220,13 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				
 				//Getting the chat input
 		final TextField chatInput = new TextField();
+		chatInput.setWidth("500px");
+		
 		final Button sendButton = new Button("Send");
 		final Label enterName = new Label("Enter your name:");
+		this.setStyleName("body");
 		
-		
-		final Button test = new Button("Test");
-		
-		test.addClickListener(new Button.ClickListener() {
-			@Override
-		    public void buttonClick(ClickEvent event) {
-		        // Broadcast the message
-				
-		        Broadcaster.broadcastBoard(board);
-		        
-		    }
-		});
+	
 		
 		nameButton.addClickListener(new Button.ClickListener() {
 			@Override
@@ -233,6 +238,8 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				hLayout.addComponent(upload);
 				hLayout.addComponent(solveButton);
 				
+				solveButton.setStyleName("button");
+				
 				
 				h2Layout.addComponent(panel);
 				h2Layout.addComponent(chatLayout);
@@ -240,6 +247,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				
 				vLayout.addComponent(h2Layout);
 				vLayout.addComponent(inputPanel);
+				inputPanel.setStyleName("chatbox");
 				
 				hLayout.setMargin(true);
 				hLayout.setSpacing(true);
@@ -252,8 +260,9 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				
 				
 				chatLayout.addComponent(chatInput);
+				chatInput.setStyleName("chatbox");
 				chatLayout.addComponent(sendButton);
-				chatLayout.addComponent(test);
+				
 				
 				vLayout.removeComponent(enterName);
 				vLayout.removeComponent(nameInput);
@@ -277,12 +286,16 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		uploadReceiver = new UploadReceiver(grid, board);
 		upload = new Upload(" ", uploadReceiver);
 		upload.setButtonCaption("Load Soduko File");
+		upload.setStyleName("button");
 		upload.setImmediate(true);
 		
 		//Chat items
 		vLayout.addComponent(enterName);
 		vLayout.addComponent(nameInput);
 		vLayout.addComponent(nameButton);
+		
+		//Style settings
+		
 		
 		setContent(vLayout);
 
@@ -335,6 +348,29 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 	        });
 	    }
 	 
+	 public void checkForUpdate(final Board checkBoard) {
+	        // Must lock the session to execute logic safely
+	        access(new Runnable() {
+	            @Override
+	            public void run() {
+	                // Show it somehow
+	              
+	               
+	               for( int col = 0; col < 9; col++ ){
+	    				for( int row = 0; row < 9; row++ ){
+	    					String value = Integer.toString(checkBoard.getIntegerValue(row, col));
+	    					
+	    					if(value != "0"){
+	    						Broadcaster.broadcastBoard(board);
+	    					}
+	    					
+	    					
+	    				}	
+	    			}
+	            }
+	        });
+	    }
+	 
 	 public void updateBoard(final Board newBoard) {
 	        // Must lock the session to execute logic safely
 	        access(new Runnable() {
@@ -369,6 +405,12 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 
 	    					label.setWidth(null);
 	    					label.setImmediate(true);
+	    					
+	    					if(board.getCellElement(col, row).isReadOnly()){
+	    						label.setStyleName("readonly");
+	    					} else {
+	    						label.setStyleName("notreadonly");
+	    					}
 	    					
 	    					DragAndDropWrapper layoutWrapper = new DragAndDropWrapper(label);
 	    					
