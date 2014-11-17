@@ -39,8 +39,9 @@ public class ChatText extends CustomComponent {
 	}
 	
 	public void addChat(String message){
-	
-		pLayout.addComponent(new Label(message));
+		Label label = new Label(message);
+		label.setWidth("490px");
+		pLayout.addComponent(label);
 		panel.setContent(pLayout);
 		
 	}

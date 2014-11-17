@@ -1,6 +1,8 @@
 package com.example.sudokuhci;
 
 
+import java.io.File;
+
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Push;
@@ -12,6 +14,8 @@ import com.vaadin.event.Transferable;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
@@ -33,8 +37,10 @@ import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
 import com.vaadin.ui.DragAndDropWrapper.WrapperTargetDetails;
 import com.vaadin.ui.DragAndDropWrapper.WrapperTransferable;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
@@ -64,6 +70,7 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 	private final VerticalLayout chatLayout = new VerticalLayout();
 	
 	private final HorizontalLayout h2Layout = new HorizontalLayout();
+	private final HorizontalLayout topLayout = new HorizontalLayout();
 	
 	private UploadReceiver uploadReceiver;
 	private Upload upload;
@@ -226,15 +233,23 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		final Label enterName = new Label("Enter your name:");
 		this.setStyleName("body");
 		
+		//Getting our image
+		FileResource resource = new FileResource(new File(basepath +
+                "/WEB-INF/images/image.png"));
+
+		//Show the image in the application
+		final Embedded image = new Embedded( "",resource);
 	
-		
+		//
 		nameButton.addClickListener(new Button.ClickListener() {
 			@Override
 		    public void buttonClick(ClickEvent event) {
 		        name = nameInput.getValue();
 		        chatLayout.addComponent(chatBox);
 		        
-				vLayout.addComponent( hLayout );
+				vLayout.addComponent( topLayout );
+				topLayout.addComponent(image);
+				topLayout.addComponent(hLayout);
 				hLayout.addComponent(upload);
 				hLayout.addComponent(solveButton);
 				
@@ -251,7 +266,10 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 				
 				hLayout.setMargin(true);
 				hLayout.setSpacing(true);
+				topLayout.setComponentAlignment(image, Alignment.MIDDLE_LEFT);
+				hLayout.setComponentAlignment(upload, Alignment.BOTTOM_LEFT);
 				hLayout.setComponentAlignment(solveButton, Alignment.BOTTOM_RIGHT);
+				
 				
 				
 				
@@ -310,13 +328,20 @@ public class Sudoku extends UI implements Broadcaster.BroadcastListener{
 		    public void buttonClick(ClickEvent event) {
 		        // Broadcast the message
 				SolveChecker checker = new SolveChecker(grid, board);
+				
 				if(!checker.solveSudoko()){
-					//Replace this with a UI broadcast
-					Notification.show("Incorrect!");
+					
+					Notification notification = new Notification("Incorrect!");
+					notification.show(Page.getCurrent());
 					System.out.println("INCORRECT");
+					System.out.println(notification.getStyleName());
 				} else {
-					Notification.show("Correct!");
+					Notification notification = new Notification("Correct!");
+					
+					notification.setStyleName("notification");
+					
 					System.out.println("CORRECT");
+					
 
 				}
 		        
